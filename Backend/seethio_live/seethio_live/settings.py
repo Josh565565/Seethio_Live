@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-prs+%oud^uy1)kv5c6yqm4eg(2n#6ujtdor91k(d1^w)z*0$!q"
+SECRET_KEY = str(os.getenv('SECRET_KEY'))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -146,7 +149,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "static/images")
 # Brevo
 EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
 ANYMAIL = {
-    "SENDINBLUE_API_KEY": "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",
+    "SENDINBLUE_API_KEY": config("SENDINBLUE_API_KEY"),
 }
 SENDINBLUE_API_URL = "https://api.brevo.com/v3/"
 # ANYMAIL = {
