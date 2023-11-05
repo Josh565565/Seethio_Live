@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "userauthentication",
+    "anymail",
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -130,14 +132,25 @@ MEDIA_URL = "images/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "static/images")
 
 # SMTP configuration
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.gmail.com"
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
-DEFAULT_FROM_EMAIL = "TestSite Team <noreply@example.com>"
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+# EMAIL_HOST = "smtp.gmail.com"
+# EMAIL_HOST_USER = "studismartapp@gmail.com"
+# EMAIL_HOST_PASSWORD = "nxpx rvcq kxal odns"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
 
 # django_project/settings.py
 # EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 # EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+
+# Brevo
+EMAIL_BACKEND = "anymail.backends.sendinblue.EmailBackend"
+ANYMAIL = {
+    "SENDINBLUE_API_KEY": "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",
+}
+SENDINBLUE_API_URL = "https://api.brevo.com/v3/"
+# ANYMAIL = {
+#     "MAILGUN_API_KEY": "<your Mailgun key>",
+# }
+# DEFAULT_FROM_EMAIL = ""
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
