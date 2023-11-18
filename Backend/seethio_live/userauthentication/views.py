@@ -68,7 +68,7 @@ def register_view(request):
     context = {
         "form": form,
     }
-    return render(request, "Html/Signup/Signup.html", context)
+    return render(request, "Html/Signup/Signup2.html", context)
 
 
 def sign_success(request):
@@ -98,7 +98,7 @@ def login_view(request):
         except User.DoesNotExist:
             messages.warning(request, f"User with {email} does not exist")
 
-    return render(request, "Html/Login/login.html")
+    return render(request, "Html/Login/login2.html")
 
 
 def logout_view(request):
