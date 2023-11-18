@@ -30,15 +30,17 @@ User = get_user_model()
 def index(request):
     return render(request, "Html/index.html")
 
+def home(request):
+    return render(request, "Html/home.html")
+
+
 
 def register_view(request):
     if request.method == "POST":
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            email_verification, created = EmailVerification.objects.get_or_create(
-                user=user
-            )
+            email_verification, created = EmailVerification.objects.get_or_create(user=user)
             email_verification.generate_otp()
             email_verification.save()
 
@@ -51,16 +53,12 @@ def register_view(request):
             try:
                 send_mail(subject, message, from_email, [to_email])
             except Exception as e:
-                messages.error(
-                    request, "Failed to send email with OTP. Please contact support."
-                )
+                messages.error(request, "Failed to send email with OTP. Please contact support.")
                 return redirect("userauthentication:signup")
 
             # Encode user.id for the URL
             uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
-            return render(
-                request, "Html/Signup/sign_up_successful.html", {"uidb64": uidb64}
-            )
+            return render(request, "Html/Signup/sign_up_successful.html", {"uidb64": uidb64})
 
     else:
         form = UserRegisterForm()
@@ -68,7 +66,7 @@ def register_view(request):
     context = {
         "form": form,
     }
-    return render(request, "Html/Signup/Signup2.html", context)
+    return render(request, "Html/Signup/Signup.html", context)
 
 
 def sign_success(request):
@@ -87,14 +85,11 @@ def login_view(request):
                 if user is not None:
                     login(request, user)
                     messages.success(request, "You are logged in successfully")
-                    return redirect("userauthentication:index")
+                    return redirect("userauthentication:home")
                 else:
                     messages.warning(request, "Incorrect password")
             else:
-                messages.warning(
-                    request,
-                    "Email is not verified. Please check your email for the OTP.",
-                )
+                messages.warning(request, "Email is not verified. Please check your email for the OTP.")
         except User.DoesNotExist:
             messages.warning(request, f"User with {email} does not exist")
 
@@ -158,7 +153,7 @@ def reset_password(request):
         form = SetPasswordForm(request.POST)
         if form.is_valid():
             # Reset the user's password
-            new_password = form.cleaned_data["new_password1"]  # Get the new password
+            new_password = form.cleaned_data['new_password1']  # Get the new password
             user = request.user  # Assuming the user is authenticated
             user.set_password(new_password)
             user.save()
@@ -195,9 +190,7 @@ def verify_email(request, uidb64):
             email_verification.save()
             user.email_verified = True
             user.save()
-            messages.success(
-                request, "Email verification successful. You can now log in."
-            )
+            messages.success(request, "Email verification successful. You can now log in.")
             return redirect("userauthentication:email_verification_complete")
         else:
             messages.error(request, "Invalid OTP. Please try again.")
@@ -213,7 +206,6 @@ def verify_email(request, uidb64):
 
 def email_verification_complete(request):
     return render(request, "Html/Signup/Email_verification_complete.html")
-
 
 def resend_password_reset_email(request):
     if request.method == "POST":
